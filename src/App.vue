@@ -58,29 +58,30 @@ export default {
   methods: {
     ...mapActions(['add_participant', 'add_participants', 'reset', 'reset_times', 'tick']),
 
-    add () {
+    add (e) {
       const name = prompt('Comment doit-on l\'appeler ?')
       if (name) {
         this.add_participant(name)
       }
+      e.target.blur()
     },
 
-    reset_confirm () {
+    reset_confirm (e) {
       if (confirm('Voulez-vous vraiment supprimer l\'intégralité des participant(e)s ?')) {
         this.reset()
       }
+      e.target.blur()
     },
 
-    reset_times_confirm () {
+    reset_times_confirm (e) {
       if (confirm('Voulez-vous vraiment réinitialiser le temps de parole de l\'intégralité des participant(e)s ?')) {
         this.reset_times()
       }
+      e.target.blur()
     },
 
     setup_update_task () {
-      console.log('Setup task')
       this.updateTask = setInterval(() => {
-        console.log('tick')
         if (this.lastTick !== null) {
           const now = Date.now()
           this.tick((now - this.lastTick) / 1000)
