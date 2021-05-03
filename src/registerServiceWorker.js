@@ -15,12 +15,14 @@ if (process.env.NODE_ENV === 'production') {
     },
     cached () {
       console.log('Content has been cached for offline use.')
+      document.location.reload()
     },
     updatefound () {
       console.log('New content is downloading.')
     },
     updated () {
       console.log('New content is available; please refresh.')
+      document.location.reload()
     },
     offline () {
       console.log('No internet connection found. App is running in offline mode.')
