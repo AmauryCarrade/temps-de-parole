@@ -1,7 +1,14 @@
 <template>
   <div id="app">
-    <main class="participants">
+    <main class="participants" :class="{ 'is-empty': no_participants }">
       <ParticipantTile :uuid="participant.uuid" v-for="(participant, i) in participants" :key="i" />
+      <div class="no-participants" v-if="no_participants">
+        <p><strong>Commencez par ajouter un ou une participant(e) en cliquant sur le bouton en bas à gauche.</strong></p>
+        <p>
+          Ensuite, tapotez la tuile de quelqu'un lors qu'il ou elle commence à parler, et tapez à nouveau s'iel
+          cesse.
+        </p>
+      </div>
     </main>
     <footer>
       <div class="actions">
@@ -41,7 +48,11 @@ export default {
   },
 
   computed: {
-    ...mapState(['participants'])
+    ...mapState(['participants']),
+
+    no_participants () {
+      return Object.keys(this.participants).length === 0
+    }
   },
 
   methods: {
@@ -129,13 +140,19 @@ html, body
   main.participants
     @extend %container
 
-    display: grid
-    grid-template-columns: repeat(2, 1fr)
-    grid-gap: .4rem
+    &:not(.is-empty)
+      display: grid
+      grid-template-columns: repeat(2, 1fr)
+      grid-gap: .4rem
 
     padding: .4rem
-
     flex: 4
+
+    .no-participants
+      margin: 16vh 1rem 1rem
+      font-size: 1.2rem
+      text-align: center
+      color: hsl(276, 91%, 23%)
 
   footer
     background-color: hsl(262, 90%, 96%)
