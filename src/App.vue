@@ -75,6 +75,21 @@ export default {
       if (confirm('Voulez-vous vraiment réinitialiser le temps de parole de l\'intégralité des participant(e)s ?')) {
         this.reset_times()
       }
+    },
+
+    setup_update_task () {
+      console.log('Setup task')
+      this.updateTask = setInterval(() => {
+        console.log('tick')
+        if (this.lastTick !== null) {
+          const now = Date.now()
+          this.tick((now - this.lastTick) / 1000)
+          this.lastTick = now
+        } else {
+          this.tick(0.5)
+          this.lastTick = Date.now()
+        }
+      }, 500)
     }
   },
 
@@ -90,16 +105,13 @@ export default {
     }
 
     // Tick twice a second
-    this.updateTask = setInterval(() => {
-      if (this.lastTick !== null) {
-        const now = Date.now()
-        this.tick((now - this.lastTick) / 1000)
-        this.lastTick = now
-      } else {
-        this.tick(0.5)
-        this.lastTick = Date.now()
-      }
-    }, 500)
+    this.setup_update_task()
+  },
+
+  beforeUpdate () {
+    if (this.updateTask === null) {
+      this.setup_update_task()
+    }
   },
 
   beforeDestroy () {
