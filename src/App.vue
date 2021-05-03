@@ -33,7 +33,8 @@ export default {
 
   data () {
     return {
-      updateTask: null
+      updateTask: null,
+      lastTick: null
     }
   },
 
@@ -42,7 +43,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['add_participant', 'add_participants', 'reset', 'tick_every_second']),
+    ...mapActions(['add_participant', 'add_participants', 'reset', 'tick']),
 
     add () {
       const name = prompt('Comment doit-on l\'appeler ?')
@@ -70,7 +71,11 @@ export default {
     }
 
     // Tick every second
-    this.updateTask = setInterval(this.tick_every_second, 1000)
+    this.updateTask = setInterval(() => {
+      const now = Date.now()
+      this.tick((now - this.lastTick) / 1000)
+      this.lastTick = now
+    }, 500)
   },
 
   beforeDestroy () {
@@ -115,13 +120,14 @@ html, body
     flex: 4
 
   footer.actions
-    padding: .4rem 0 .2rem
+    padding: 0
     display: grid
     grid-template-columns: repeat(3, 1fr)
 
     background-color: hsl(262, 90%, 96%)
 
     button
+      padding: .4rem 0 .2rem
       border: none
       display: flex
       flex-direction: column
@@ -129,6 +135,14 @@ html, body
 
       background-color: hsl(262, 90%, 96%)
       cursor: pointer
+
+      transition: background-color .05s ease-in-out, color .1s ease-in-out
+
+      &:hover
+        background-color: hsl(262, 100%, 88%)
+
+        svg, span
+          color: hsl(276, 91%, 23%)
 
       svg
         display: block

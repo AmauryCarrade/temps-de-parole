@@ -37,8 +37,8 @@ export default new Vuex.Store({
       Vue.set(this.state.participants[uuid], 'talking', talking)
     },
 
-    tick_one_second (date, uuid) {
-      Vue.set(this.state.participants[uuid], 'elapsed', this.state.participants[uuid].elapsed + 1)
+    tick (date, { uuid, timeSinceLastTick }) {
+      Vue.set(this.state.participants[uuid], 'elapsed', this.state.participants[uuid].elapsed + timeSinceLastTick)
     }
   },
 
@@ -89,10 +89,10 @@ export default new Vuex.Store({
       context.dispatch('save')
     },
 
-    tick_every_second (context) {
+    tick (context, timeSinceLastTick) {
       for (const uuid of Object.keys(this.state.participants)) {
         if (this.state.participants[uuid].talking) {
-          context.commit('tick_one_second', uuid)
+          context.commit('tick', { uuid, timeSinceLastTick })
         }
       }
       context.dispatch('save')
