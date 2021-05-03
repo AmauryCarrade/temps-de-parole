@@ -2,7 +2,7 @@
   <div class="participant-tile" :class="{ 'is-talking': participant.talking }" @click="toggle_talk(uuid)">
     <h1>{{ participant.name }}</h1>
     <p class="timer" :class="{ 'has-hours': has_hours }">{{ duration }}</p>
-    <p class="percentage" v-if="percentage != null">{{ percentage }}%</p>
+    <p class="percentage">{{ percentage !== null ? percentage : '— ' }}%</p>
   </div>
 </template>
 

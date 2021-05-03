@@ -33,12 +33,16 @@ export default new Vuex.Store({
       state.participants = {}
     },
 
-    talk (state, { uuid, talking }) {
-      Vue.set(this.state.participants[uuid], 'talking', talking)
+    reset_time (state, uuid) {
+      Vue.set(state.participants[uuid], 'elapsed', 0)
     },
 
-    tick (date, { uuid, timeSinceLastTick }) {
-      Vue.set(this.state.participants[uuid], 'elapsed', this.state.participants[uuid].elapsed + timeSinceLastTick)
+    talk (state, { uuid, talking }) {
+      Vue.set(state.participants[uuid], 'talking', talking)
+    },
+
+    tick (state, { uuid, timeSinceLastTick }) {
+      Vue.set(state.participants[uuid], 'elapsed', state.participants[uuid].elapsed + timeSinceLastTick)
     }
   },
 
@@ -50,6 +54,14 @@ export default new Vuex.Store({
     reset (context) {
       context.commit('reset')
       localStorage.removeItem('participants')
+    },
+
+    reset_times (context) {
+      context.dispatch('stop_talking')
+      for (const uuid of Object.keys(context.state.participants)) {
+        context.commit('reset_time', uuid)
+      }
+      context.dispatch('save')
     },
 
     add_participants (context, participants) {
@@ -67,7 +79,7 @@ export default new Vuex.Store({
     },
 
     toggle_talk (context, uuid) {
-      const wasTalking = this.state.participants[uuid].talking
+      const wasTalking = context.state.participants[uuid].talking
       context.dispatch('stop_talking')
 
       if (!wasTalking) {
@@ -80,7 +92,7 @@ export default new Vuex.Store({
     },
 
     stop_talking (context) {
-      for (const uuid of Object.keys(this.state.participants)) {
+      for (const uuid of Object.keys(context.state.participants)) {
         context.commit('talk', {
           uuid,
           talking: false
@@ -90,8 +102,8 @@ export default new Vuex.Store({
     },
 
     tick (context, timeSinceLastTick) {
-      for (const uuid of Object.keys(this.state.participants)) {
-        if (this.state.participants[uuid].talking) {
+      for (const uuid of Object.keys(context.state.participants)) {
+        if (context.state.participants[uuid].talking) {
           context.commit('tick', { uuid, timeSinceLastTick })
         }
       }
