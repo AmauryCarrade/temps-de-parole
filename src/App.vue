@@ -78,11 +78,16 @@ export default {
       console.error('Unable to load saved participants', e)
     }
 
-    // Tick every second
+    // Tick twice a second
     this.updateTask = setInterval(() => {
-      const now = Date.now()
-      this.tick((now - this.lastTick) / 1000)
-      this.lastTick = now
+      if (this.lastTick !== null) {
+        const now = Date.now()
+        this.tick((now - this.lastTick) / 1000)
+        this.lastTick = now
+      } else {
+        this.tick(0.5)
+        this.lastTick = Date.now()
+      }
     }, 500)
   },
 
