@@ -157,6 +157,7 @@ html, body
       display: grid
       grid-template-columns: repeat(2, 1fr)
       grid-gap: .4rem
+      margin-bottom: 60px
 
     padding: .4rem
     flex: 4
