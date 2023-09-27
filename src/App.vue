@@ -184,6 +184,7 @@ html, body
         display: flex
         flex-direction: column
         align-content: center
+        align-items: center  // Safari alignment
 
         background-color: hsl(262, 90%, 96%)
         cursor: pointer
